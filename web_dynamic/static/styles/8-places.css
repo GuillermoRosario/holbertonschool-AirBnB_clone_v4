@@ -1,4 +1,4 @@
-places {
+.places {
     column-count: 2;
     columns: 30em;
     justify-content: center;
@@ -6,11 +6,11 @@ places {
     margin-top: 1%;
     margin-bottom: 8%;
 }
-
-@media only screen and (max-width: 920px) {
+@media only screen and (max-width: 920px)
+{
     .places {
-        display: flex;
-        flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
     }
 }
 
@@ -32,13 +32,11 @@ places {
     border: 1px solid #FF5A5F;
     border-radius: 4px;
 }
-
 .places h2 {
     font-size: 30px;
     text-align: center;
     margin-top: 0;
 }
-
 .title_box {
     display: flex;
     justify-content: space-between;
@@ -51,7 +49,6 @@ places {
     max-width: 75%;
     word-wrap: break-word;
 }
-
 .price_by_night {
     display: flex;
     height: 60px;
@@ -100,5 +97,5 @@ places {
 }
 
 .user {
-    margin-bottom: 1.5%;
+  margin-bottom: 1.5%;
 }
