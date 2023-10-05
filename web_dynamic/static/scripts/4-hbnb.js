@@ -31,59 +31,58 @@ $(document).ready(function () {
     $('.amenityFilter h4').text(Object.values(amenityIds).join(', '));
   });
   $('button').click(function () {
-    if (Object.keys(amenityIds) !== 0) {
-      $('.places').text('');
+      if (Object.keys(amenityIds) !== 0) {
+          $('.places').text(''); 
+          $.ajax({
+              type: 'POST',
+              url: 'http://0.0.0.0:5001/api/v1/places_search/',
+              contentType:"application/json; charset=utf-8",
+              data: JSON.stringify({}),
+              success: function(data, status) {
+                data.sort((a, b) => a.name.localeCompare(b.name));
+              for (const place of data) {
+                  $.ajax({
+                      type: 'GET',
+                      url: `http://0.0.0.0:5001/api/v1/places/${place.id}/amenities`,
+                      success: (results) => {
+                          let idArray = results.map(obj => obj.id);
+                          if (Object.keys(amenityIds).every(value => idArray.includes(value))) {
+                              printPlace(place);
+                          }
+                      }
+                  });
+              };
+          }});
+      };
+  });
+  $(() => {
+      $.ajax({
+        type: 'GET',
+        url: 'http://0.0.0.0:5001/api/v1/status/',
+        success: (data) => {
+          if (data.status === 'OK') {
+            $('div#api_status').addClass('available');
+          } else {
+            $('div#api_status').removeClass('available');
+          }
+        },
+        error: () => {
+          $('div#api_status').removeClass('available');
+        }
+      });
+  });
+  $(() => {
       $.ajax({
         type: 'POST',
         url: 'http://0.0.0.0:5001/api/v1/places_search/',
-        contentType: "application/json; charset=utf-8",
+        contentType:"application/json; charset=utf-8",
         data: JSON.stringify({}),
-        success: function (data, status) {
+        success: function(data, status) {
           data.sort((a, b) => a.name.localeCompare(b.name));
           for (const place of data) {
-            $.ajax({
-              type: 'GET',
-              url: `http://0.0.0.0:5001/api/v1/places/${place.id}/amenities`,
-              success: (results) => {
-                let idArray = results.map(obj => obj.id);
-                if (Object.keys(amenityIds).every(value => idArray.includes(value))) {
-                  printPlace(place);
-                }
-              }
-            });
-          };
-        }
+              printPlace(place);
+              };
+          }
       });
-    };
-  });
-  $(() => {
-    $.ajax({
-      type: 'GET',
-      url: 'http://0.0.0.0:5001/api/v1/status/',
-      success: (data) => {
-        if (data.status === 'OK') {
-          $('div#api_status').addClass('available');
-        } else {
-          $('div#api_status').removeClass('available');
-        }
-      },
-      error: () => {
-        $('div#api_status').removeClass('available');
-      }
-    });
-  });
-  $(() => {
-    $.ajax({
-      type: 'POST',
-      url: 'http://0.0.0.0:5001/api/v1/places_search/',
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({}),
-      success: function (data, status) {
-        data.sort((a, b) => a.name.localeCompare(b.name));
-        for (const place of data) {
-          printPlace(place);
-        };
-      }
-    });
   });
 });
